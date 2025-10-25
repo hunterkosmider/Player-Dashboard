@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Player Stats Dashboard</title>
+<style>
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f8f9fc;
+  margin: 0;
+  padding: 0;
+}
+h2 {
+  text-align: center;
+  color: #0b3d91;
+  margin-top: 20px;
+}
+.table-wrapper {
+  overflow-x: auto;
+  padding: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+th, td {
+  padding: 8px 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background: #0b3d91;
+  color: white;
+}
+tr:hover {
+  background: #eef3ff;
+}
+a {
+  text-decoration: none;
+  color: #0b3d91;
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<h2>2025 Player Batting Dashboard</h2>
+<div class="table-wrapper">
+  <table id="playerStats">
+    <thead></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+const sheetURL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrR4Cz7YOxMj38oCi4NQnm9Ogs5gJLHByIRY8B-zX7gZhS8PLWf92-zUN_75KB3lvtROISzylKtNW0/export?format=csv&gid=0";
+
+// Map player names to profile pages (optional)
+const playerLinks = {
+  "John Doe": "https://yourgooglesite.com/player-john-doe",
+  "Jane Smith": "https://yourgooglesite.com/player-jane-smith"
+};
+
+// Displayed columns
+const showCols = ["Name", "AVG", "OPS", "H", "2B", "3B", "HR", "RBI", "R"];
+
+fetch(sheetURL)
+  .then(res => res.text())
+  .then(csv => {
+    const rows = csv.trim().split("\n").map(r => r.split(","));
+    const headers = rows[0];
+    const data = rows.slice(1);
+    const colIndexes = showCols.map(c => headers.indexOf(c)).filter(i => i >= 0);
+
+    const thead = document.querySelector("#playerStats thead");
+    const trHead = document.createElement("tr");
+    showCols.forEach(col => {
+      const th = document.createElement("th");
+      th.textContent = col;
+      trHead.appendChild(th);
+    });
+    thead.appendChild(trHead);
+
+    const tbody = document.querySelector("#playerStats tbody");
+    data.forEach(row => {
+      if (!row[0]) return;
+      const tr = document.createElement("tr");
+      colIndexes.forEach((idx, i) => {
+        const td = document.createElement("td");
+        let val = row[idx] || "-";
+        if (i === 0) { // player name
+          const name = val.trim();
+          const link = playerLinks[name] || "#";
+          td.innerHTML = `<a href="${link}" target="_blank">${name}</a>`;
+        } else {
+          td.textContent = val;
+        }
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  })
+  .catch(err => console.error("Error loading sheet:", err));
+</script>
+
+</body>
+</html>

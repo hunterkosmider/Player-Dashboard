@@ -59,7 +59,7 @@ a {
 
 <script>
 const sheetURL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrR4Cz7YOxMj38oCi4NQnm9Ogs5gJLHByIRY8B-zX7gZhS8PLWf92-zUN_75KB3lvtROISzylKtNW0/export?format=csv&gid=0";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrR4Cz7YOxMj38oCi4NQnm9Ogs5gJLHByIRY8B-zX7gZhS8PLWf92-zUN_75KB3lvtROISzylKtNW0/pub?gid=1742791092&single=true&output=csv";
 
 // Map player names to profile pages (optional)
 const playerLinks = {
